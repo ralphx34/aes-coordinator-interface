@@ -30,6 +30,16 @@ Upload the Netlify Forms export and the finalized testing-cohort CSV for the sam
   </div>
 </div>
 
+<section id="submission-lookup" class="validation-panel" hidden>
+  <h2>Retrieve Individual Submission</h2>
+  <p>Search the uploaded Netlify export by proctor name or university email. Download one person's previous preferences to send back for revisions. This lookup works without uploading the cohort CSV; all processing takes place in your browser.</p>
+  <div class="control-group">
+    <label for="submission-search">Proctor name or university email</label>
+    <input type="search" id="submission-search" placeholder="Enter at least 2 characters" autocomplete="off" aria-controls="submission-results">
+  </div>
+  <div id="submission-results" aria-live="polite"></div>
+</section>
+
 <div id="proctor-status" class="status-panel">Waiting for both files.</div>
 
 <div id="proctor-summary" class="proctor-summary-grid" hidden>
@@ -72,4 +82,5 @@ Upload the Netlify Forms export and the finalized testing-cohort CSV for the sam
 <div id="matching-solutions"></div>
 
 <script src="proctor-matching.js"></script>
+<script src="submission-lookup.js"></script>
 ```
