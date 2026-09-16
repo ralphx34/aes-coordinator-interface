@@ -1,0 +1,16 @@
+[
+  {
+    "objectID": "proctor-matching.html",
+    "href": "proctor-matching.html",
+    "title": "Proctor Matching",
+    "section": "",
+    "text": "Proctor Matching\n\nHow to use: Upload the Netlify Forms export and the finalized testing-cohort CSV for the same exam period. The site processes both files locally in your browser, expands each proctor submission into one row per cohort, and validates the data before allowing a cleaned export. Duplicate submissions are resolved automatically using the latest valid preferences while preserving the earliest valid submission time for FCFS priority. Preferences are reconciled against the cohort CSV you choose: matching cohorts retain their responses, removed cohorts are omitted, and cohorts missing from an older submission default to Unavailable.\n\n\n  \n    Netlify Forms Export\n    \n  \n\n  \n    Testing Cohort CSV\n    \n  \n\n  \n    Expected Proctor Roster\n    Coming Later\n  \n\n\n\n  Retrieve Individual Submission\n  Search the uploaded Netlify export by proctor name or university email. Download one person's previous preferences to send back for revisions. This lookup works without uploading the cohort CSV; all processing takes place in your browser.\n  \n    Proctor name or university email\n    \n  \n  \n\n\nWaiting for both files.\n\n\n  \n    0\n    Submissions\n  \n  \n    0\n    Valid\n  \n  \n    0\n    Cohorts\n  \n  \n    0\n    Preference Rows\n  \n\n\n\n\n\n  \n    Download Cleaned CSV\n  \n\n\n\n\n\n  \n    Run Matching"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "AES Coordinator",
+    "section": "",
+    "text": "AES Coordinator\n\nHow to use: Upload one or more instructor AES submission .json files. The site processes the files locally in your browser. The Detailed View is built first from the instructor submissions. The Planning View is then derived from the Detailed View.\n\n\n  \n    Instructor Submission Files\n    \n  \n\n  \n    Search Current View\n    \n  \n\n\nNo files loaded.\n\n\n  \n    Detailed View\n  \n\n  \n    Planning View\n  \n\n\n\n  Detailed View shows one row per student slot per exam. If an instructor reports more AES students than they can identify individually, placeholder rows are included as No student information.\n\n\n\n  No selection — entire Planning View will be exported.\n  \n    Export to Excel"
+  }
+]
