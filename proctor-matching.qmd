@@ -9,7 +9,7 @@ format: html
 
 <div class="instructions">
 <strong>How to use:</strong>
-Upload the Netlify Forms export and the finalized testing-cohort CSV for the same exam period. The site processes both files locally in your browser, expands each proctor submission into one row per cohort, and validates the data before allowing a cleaned export. Duplicate submissions are resolved automatically using the latest valid preferences while preserving the earliest valid submission time for FCFS priority. Stale submissions from older cohort configurations are excluded with a warning.
+Upload the Netlify Forms export and the finalized testing-cohort CSV for the same exam period. The site processes both files locally in your browser, expands each proctor submission into one row per cohort, and validates the data before allowing a cleaned export. Duplicate submissions are resolved automatically using the latest valid preferences while preserving the earliest valid submission time for FCFS priority. Preferences are reconciled against the cohort CSV you choose: matching cohorts retain their responses, removed cohorts are omitted, and cohorts missing from an older submission default to Unavailable.
 </div>
 
 ```{=html}

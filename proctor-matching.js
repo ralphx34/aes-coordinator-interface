@@ -32,6 +32,8 @@ const state = {
   warnings: [],
   staleSubmissionCount: 0,
   duplicateSubmissionCount: 0,
+  reconciledMissingCount: 0,
+  reconciledRemovedCount: 0,
   validSubmissionCount: 0,
   matchingSolutions: [],
   matchingStats: null
@@ -77,6 +79,8 @@ function processData() {
   state.warnings = [];
   state.staleSubmissionCount = 0;
   state.duplicateSubmissionCount = 0;
+  state.reconciledMissingCount = 0;
+  state.reconciledRemovedCount = 0;
   state.validSubmissionCount = 0;
 
   if (!state.netlifyRows.length) {
@@ -146,39 +150,35 @@ function processData() {
       return;
     }
 
-    // Stale/incompatible form versions should not block the current matching workflow.
-    if (payload.length !== state.cohortRows.length) {
-      state.staleSubmissionCount += 1;
-      state.warnings.push(
-        `Submission row ${humanRow} (${email}) was excluded as stale/incompatible: ` +
-        `payload has ${payload.length} cohorts but the current cohort CSV has ${state.cohortRows.length}.`
-      );
-      return;
-    }
-
+    // Validate the submitted form as submitted, independently of the uploaded cohort CSV.
+    // The user-selected cohort CSV is authoritative for output, not for historical validity.
     let preferredCount = 0;
     let hasBlockingProblem = false;
+    const submittedKeys = new Set();
 
     payload.forEach((entry, payloadIndex) => {
       const response = String(entry?.response ?? "").trim();
       const embeddedCohort = entry?.cohort;
-      const authoritative = state.cohortRows[payloadIndex];
 
       if (!ALLOWED_RESPONSES.has(response)) {
         state.blockingIssues.push(
-          `Submission row ${humanRow}, cohort ${payloadIndex + 1}: unknown response "${response}".`
+          `Submission row ${humanRow}, submitted cohort ${payloadIndex + 1}: unknown response "${response}".`
         );
         hasBlockingProblem = true;
       }
-
       if (response === "Preferred") preferredCount += 1;
 
-      if (!embeddedCohort || !cohortsEquivalent(authoritative, embeddedCohort)) {
-        state.blockingIssues.push(
-          `Submission row ${humanRow}, cohort ${payloadIndex + 1}: embedded cohort does not match the uploaded testing-cohort CSV.`
-        );
+      if (!embeddedCohort || typeof embeddedCohort !== "object" || Array.isArray(embeddedCohort) || !Object.keys(embeddedCohort).length) {
+        state.blockingIssues.push(`Submission row ${humanRow}, submitted cohort ${payloadIndex + 1}: missing embedded cohort.`);
+        hasBlockingProblem = true;
+        return;
+      }
+      const key = cohortIdentity(embeddedCohort);
+      if (submittedKeys.has(key)) {
+        state.blockingIssues.push(`Submission row ${humanRow}: duplicate cohort identity in submitted preferences; cannot reconcile safely.`);
         hasBlockingProblem = true;
       }
+      submittedKeys.add(key);
     });
 
     if (preferredCount !== 3) {
@@ -238,11 +238,36 @@ function processData() {
     });
   }
 
+  // Do not silently guess when the uploaded cohort CSV itself has duplicate identities.
+  const uploadedKeys = new Map();
+  state.cohortRows.forEach((cohort, index) => {
+    const key = cohortIdentity(cohort);
+    if (uploadedKeys.has(key)) {
+      state.blockingIssues.push(
+        `Uploaded cohort CSV rows ${uploadedKeys.get(key) + 1} and ${index + 1} have identical cohort attributes; reconciliation is ambiguous.`
+      );
+    } else {
+      uploadedKeys.set(key, index);
+    }
+  });
+  if (state.blockingIssues.length) {
+    renderAll();
+    return;
+  }
+
   state.validSubmissionCount = resolvedSubmissions.length;
 
   resolvedSubmissions.forEach((submission) => {
-    submission.payload.forEach((entry, payloadIndex) => {
-      const authoritative = state.cohortRows[payloadIndex];
+    const responseByIdentity = new Map(
+      submission.payload.map(entry => [cohortIdentity(entry.cohort), String(entry.response).trim()])
+    );
+    let missing = 0;
+    let retained = 0;
+    state.cohortRows.forEach((authoritative, currentIndex) => {
+      const key = cohortIdentity(authoritative);
+      const exists = responseByIdentity.has(key);
+      if (exists) retained += 1;
+      else missing += 1;
 
       state.cleanedRows.push({
         "Proctor Name": submission.name,
@@ -251,11 +276,22 @@ function processData() {
         "Submission Order": "",
         "Latest Submission Time": submission.submittedAt,
         "Exam Period": submission.examPeriod,
-        "Cohort Index": payloadIndex + 1,
+        "Cohort Index": currentIndex + 1,
         ...authoritative,
-        "Response": String(entry?.response ?? "").trim()
+        "Response": exists ? responseByIdentity.get(key) : "Unavailable"
       });
     });
+
+    const removed = submission.payload.length - retained;
+    state.reconciledMissingCount += missing;
+    state.reconciledRemovedCount += removed;
+    if (missing || removed) {
+      state.warnings.push(
+        `Submission row ${submission.humanRow} (${submission.email}): retained ${retained} matching preferences; ` +
+        `${missing} cohort${missing === 1 ? "" : "s"} absent from that submission defaulted to Unavailable; ` +
+        `${removed} submitted cohort${removed === 1 ? "" : "s"} absent from the uploaded CSV omitted.`
+      );
+    }
   });
 
   assignSubmissionOrder();
@@ -312,18 +348,12 @@ function parseTimestamp(value) {
   return Number.isNaN(time) ? null : time;
 }
 
-function cohortsEquivalent(authoritative, embedded) {
-  const authEntries = Object.entries(authoritative);
-  for (const [key, value] of authEntries) {
-    const embeddedKey = Object.keys(embedded).find(k => normalize(k) === normalize(key));
-    if (!embeddedKey) return false;
-
-    const a = normalizeCell(value);
-    const b = normalizeCell(embedded[embeddedKey]);
-
-    if (a !== b) return false;
-  }
-  return true;
+function cohortIdentity(cohort) {
+  return JSON.stringify(
+    Object.entries(cohort)
+      .map(([key, value]) => [normalize(key), normalizeCell(value)])
+      .sort((a, b) => a[0].localeCompare(b[0]))
+  );
 }
 
 function renderAll() {
@@ -438,6 +468,8 @@ function resetOutput() {
   state.warnings = [];
   state.staleSubmissionCount = 0;
   state.duplicateSubmissionCount = 0;
+  state.reconciledMissingCount = 0;
+  state.reconciledRemovedCount = 0;
   state.validSubmissionCount = 0;
   state.matchingSolutions = [];
   state.matchingStats = null;
