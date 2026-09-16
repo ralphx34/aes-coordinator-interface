@@ -1,0 +1,55 @@
+---
+title: ""
+format: html
+---
+
+<link rel="stylesheet" href="styles.css">
+
+# AES Coordinator
+
+<div class="instructions">
+<strong>How to use:</strong>
+Upload one or more instructor AES submission <code>.json</code> files. The site processes the files locally in your browser. The Detailed View is built first from the instructor submissions. The Planning View is then derived from the Detailed View.
+</div>
+
+```{=html}
+<div class="app-controls">
+  <div class="control-group file-control">
+    <label for="json-upload">Instructor Submission Files</label>
+    <input type="file" id="json-upload" accept=".json,application/json" multiple>
+  </div>
+
+  <div class="control-group search-control">
+    <label for="search-box">Search Current View</label>
+    <input type="text" id="search-box" placeholder="Search any keywords..." disabled>
+  </div>
+</div>
+
+<div id="status">No files loaded.</div>
+
+<div class="view-tabs" role="tablist" aria-label="AES data views">
+  <button type="button" id="detailed-view-button" class="view-button active" data-view="detailed">
+    Detailed View
+  </button>
+
+  <button type="button" id="planning-view-button" class="view-button" data-view="planning">
+    Planning View
+  </button>
+</div>
+
+<div id="view-description" class="view-description">
+  Detailed View shows one row per student slot per exam. If an instructor reports more AES students than they can identify individually, placeholder rows are included as <strong>No student information</strong>.
+</div>
+
+<div id="planning-export-controls" class="planning-export-controls" hidden>
+  <div id="selection-status">No selection — entire Planning View will be exported.</div>
+  <button type="button" id="export-planning-button" class="export-button">
+    Export to Excel
+  </button>
+</div>
+
+<div id="data-table"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="app.js"></script>
+```

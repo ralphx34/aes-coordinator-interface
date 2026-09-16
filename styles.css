@@ -1,0 +1,1012 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f5f5;
+}
+
+main.content {
+    max-width: 1500px;
+}
+
+.instructions {
+    margin: 8px 0 24px;
+    line-height: 1.6;
+    color: #444;
+}
+
+.app-controls {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    margin: 24px 0 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.control-group label {
+    font-weight: 600;
+}
+
+.file-control {
+    min-width: 360px;
+}
+
+.search-control {
+    flex: 1;
+}
+
+#search-box {
+    width: 100%;
+    min-width: 250px;
+    padding: 8px 10px;
+}
+
+#status {
+    margin: 16px 0;
+    padding: 12px;
+    background: #eeeeee;
+    border-radius: 6px;
+    font-size: 0.92rem;
+}
+
+.status-error {
+    background: #fff1f0 !important;
+    color: #7a271a;
+}
+
+.view-tabs {
+    display: flex;
+    gap: 8px;
+    margin: 22px 0 8px;
+}
+
+.view-button {
+    border: 1px solid #990000;
+    border-radius: 6px;
+    padding: 9px 16px;
+    background: white;
+    color: #990000;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.view-button.active {
+    background: #990000;
+    color: white;
+}
+
+.view-description {
+    margin-bottom: 14px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.exam-date-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 14px;
+}
+
+.exam-date-control label {
+    font-weight: 700;
+}
+
+.exam-date-control select {
+    min-width: 190px;
+    padding: 8px 10px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    background: white;
+}
+
+.exam-date-control.hidden {
+    display: none;
+}
+
+#data-table {
+    overflow-x: auto;
+    max-height: 68vh;
+    border: 1px solid #ddd;
+    background: white;
+}
+
+#data-table table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+#data-table th,
+#data-table td {
+    border: 1px solid #ddd;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+}
+
+#data-table th {
+    position: sticky;
+    top: 0;
+    background: white;
+    cursor: pointer;
+    z-index: 3;
+}
+
+#data-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+#data-table tbody tr:hover {
+    background: #f7eded;
+}
+
+.placeholder-student {
+    color: #777;
+    font-style: italic;
+}
+
+.empty-cell {
+    color: #999;
+}
+
+.no-data {
+    padding: 22px;
+    color: #666;
+}
+
+@media (max-width: 800px) {
+    .app-controls {
+        display: grid;
+    }
+
+    .file-control,
+    .search-control {
+        min-width: 0;
+        width: 100%;
+    }
+
+    #search-box {
+        min-width: 0;
+    }
+
+    .exam-date-control {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .exam-date-control select {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+
+.cohort-control {
+    display: flex;
+    justify-content: flex-start;
+    margin: 0 0 14px;
+}
+
+.cohort-control.hidden {
+    display: none;
+}
+
+.cohort-button {
+    border: 1px solid #990000;
+    border-radius: 6px;
+    padding: 9px 16px;
+    background: white;
+    color: #990000;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.cohort-button.active {
+    background: #990000;
+    color: white;
+}
+
+.cohort-expand-column,
+.cohort-expand-cell {
+    width: 44px;
+    min-width: 44px;
+    text-align: center !important;
+}
+
+.cohort-expand-button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #990000;
+    border-radius: 50%;
+    background: white;
+    color: #990000;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.cohort-expand-button:hover {
+    background: #f7eded;
+}
+
+.cohort-detail-row {
+    background: #fafafa !important;
+}
+
+.cohort-detail {
+    padding: 10px 6px 14px;
+}
+
+.cohort-detail-heading {
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: #444;
+}
+
+#data-table .cohort-contributors {
+    width: auto;
+    min-width: 520px;
+    white-space: nowrap;
+    border-collapse: collapse;
+}
+
+#data-table .cohort-contributors th {
+    position: static;
+    cursor: default;
+    background: #f3f3f3;
+}
+
+#data-table .cohort-contributors th,
+#data-table .cohort-contributors td {
+    padding: 7px 10px;
+}
+
+@media (max-width: 800px) {
+    .cohort-control {
+        align-items: stretch;
+    }
+
+    .cohort-button {
+        width: 100%;
+    }
+}
+
+
+.planning-date-filter {
+    display: flex;
+    align-items: end;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 0 0 14px;
+}
+
+.planning-date-filter.hidden {
+    display: none;
+}
+
+.planning-date-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.planning-date-field label {
+    font-weight: 700;
+}
+
+.planning-date-field input {
+    padding: 8px 10px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    background: white;
+}
+
+.planning-date-clear {
+    min-height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+@media (max-width: 800px) {
+    .planning-date-filter {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .planning-date-field input,
+    .planning-date-clear {
+        width: 100%;
+    }
+}
+
+
+.cohort-load-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cohort-load-label input {
+    display: none;
+}
+
+.manual-cohort-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 0 0 12px;
+}
+
+.manual-cohort-status {
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.cohort-select-column,
+.cohort-select-cell {
+    width: 58px;
+    min-width: 58px;
+    text-align: center !important;
+}
+
+.cohort-select-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.custom-cohort-row td {
+    font-weight: 600;
+}
+
+.move-student-select {
+    min-width: 260px;
+    max-width: 420px;
+    padding: 6px 8px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    background: white;
+}
+
+.cohort-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+@media (max-width: 800px) {
+    .manual-cohort-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .move-student-select {
+        min-width: 220px;
+        max-width: 100%;
+    }
+}
+
+
+.export-control {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 14px;
+}
+
+.export-button {
+    border: 1px solid #990000;
+    border-radius: 6px;
+    padding: 9px 16px;
+    background: #990000;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.export-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+@media (max-width: 800px) {
+    .export-control {
+        justify-content: stretch;
+    }
+
+    .export-button {
+        width: 100%;
+    }
+}
+
+
+.manual-cohort-action-bar {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 360px;
+    max-width: calc(100vw - 32px);
+    padding: 12px 16px;
+    border: 1px solid #bbb;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
+
+.manual-cohort-action-bar.hidden {
+    display: none;
+}
+
+.manual-cohort-action-status {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.cohort-time-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.cohort-time-modal {
+    width: min(520px, 100%);
+    padding: 22px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+}
+
+.cohort-time-modal h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.cohort-time-modal p {
+    margin-top: 0;
+    margin-bottom: 18px;
+}
+
+.cohort-time-modal-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.cohort-time-modal-fields label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.cohort-time-modal-fields input {
+    padding: 8px 10px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+}
+
+.cohort-time-modal-error {
+    margin-top: 12px;
+    font-weight: 600;
+}
+
+.cohort-time-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+@media (max-width: 700px) {
+    .manual-cohort-action-bar {
+        width: calc(100vw - 24px);
+        min-width: 0;
+        justify-content: space-between;
+        bottom: 12px;
+    }
+
+    .cohort-time-modal-fields {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.resume-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0 14px;
+}
+
+.update-summary-panel {
+    margin: 10px 0 18px;
+    padding: 14px 16px;
+    border: 1px solid #c9c9c9;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.update-summary-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-size: 1.05rem;
+}
+
+.update-summary-close {
+    border: 0;
+    background: transparent;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.update-summary-section + .update-summary-section {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e2e2e2;
+}
+
+.update-summary-title {
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+.update-summary-section ul {
+    margin: 6px 0 0 20px;
+    padding: 0;
+}
+
+.update-summary-section li + li {
+    margin-top: 5px;
+}
+
+.update-summary-empty {
+    color: #666;
+}
+
+.update-summary-section.needs-review {
+    border-left: 4px solid #a35a00;
+    padding-left: 12px;
+}
+
+@media (max-width: 700px) {
+    .resume-control {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .resume-control .cohort-button {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+
+.manual-cohort-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.student-select-column,
+.student-select-cell {
+    width: 58px;
+    min-width: 58px;
+    text-align: center !important;
+}
+
+.student-select-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+@media (max-width: 800px) {
+    .manual-cohort-action-bar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .manual-cohort-action-buttons {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .manual-cohort-action-buttons .cohort-button {
+        width: 100%;
+    }
+}
+
+
+/* Compact right-side cohort editing controls */
+.manual-cohort-action-bar {
+    left: auto;
+    right: 14px;
+    bottom: 18px;
+    transform: none;
+    min-width: 0;
+    width: auto;
+    max-width: 220px;
+    padding: 8px;
+    gap: 7px;
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 8px;
+}
+
+.manual-cohort-action-status {
+    padding: 0 3px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    white-space: normal;
+}
+
+.manual-cohort-action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: stretch;
+}
+
+.manual-cohort-action-buttons .cohort-button {
+    width: 100%;
+    padding: 7px 9px;
+    font-size: 0.82rem;
+    line-height: 1.15;
+    white-space: normal;
+}
+
+@media (max-width: 800px) {
+    .manual-cohort-action-bar {
+        left: auto;
+        right: 8px;
+        bottom: 10px;
+        width: auto;
+        max-width: 190px;
+        min-width: 0;
+        padding: 7px;
+    }
+
+    .manual-cohort-action-buttons {
+        flex-direction: column;
+    }
+
+    .manual-cohort-action-buttons .cohort-button {
+        width: 100%;
+    }
+}
+
+
+.finals-settings-control {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 12px;
+}
+
+.finals-settings-panel {
+    margin: 0 0 18px;
+    padding: 14px 16px;
+    border: 1px solid #c9c9c9;
+    border-radius: 8px;
+    background: white;
+}
+
+.finals-settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.finals-week-range {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.finals-week-range label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.finals-week-range input,
+.finals-course-table input {
+    padding: 7px 9px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+}
+
+.finals-settings-note,
+.finals-settings-empty {
+    margin: 8px 0 12px;
+    color: #555;
+    font-size: 0.93rem;
+}
+
+.finals-course-table-wrap {
+    overflow-x: auto;
+}
+
+.finals-course-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.finals-course-table th,
+.finals-course-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #e2e2e2;
+    text-align: left;
+}
+
+@media (max-width: 700px) {
+    .finals-week-range {
+        grid-template-columns: 1fr;
+    }
+
+    .finals-settings-control {
+        justify-content: stretch;
+    }
+
+    .finals-settings-control .cohort-button {
+        width: 100%;
+    }
+}
+
+
+.export-control {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+
+.finals-settings-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.finals-settings-save-message {
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+
+.selected-student-accommodation-row td {
+    padding: 0;
+    border-top: 0;
+}
+
+.selected-student-accommodation {
+    margin: 0 12px 12px;
+    padding: 10px 12px;
+    border: 1px solid #d7d7d7;
+    border-radius: 6px;
+    background: #f7f7f7;
+    line-height: 1.45;
+}
+
+.selected-student-accommodation strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.selected-student-accommodation span {
+    white-space: pre-wrap;
+}
+
+
+.room-size-cell {
+    min-width: 110px;
+}
+
+.room-size-input {
+    width: 88px;
+    box-sizing: border-box;
+    padding: 6px 8px;
+    border: 1px solid #b8b8b8;
+    border-radius: 5px;
+    font: inherit;
+    background: #fff;
+}
+
+.room-size-input-invalid {
+    border-color: #a40000;
+    outline: 1px solid #a40000;
+}
+
+.room-size-warning {
+    margin: 0 0 12px;
+    padding: 10px 12px;
+    border: 1px solid #a40000;
+    border-radius: 6px;
+    background: #fff6f6;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+
+/* Proctor Matching */
+
+.proctor-upload-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 18px;
+    margin: 24px 0 14px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+}
+
+.roster-placeholder {
+    opacity: 0.72;
+}
+
+.secondary-button {
+    min-height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    background: #f3f3f3;
+    color: #666;
+    font-weight: 600;
+}
+
+.status-panel {
+    margin: 16px 0;
+    padding: 12px;
+    background: #eeeeee;
+    border-radius: 6px;
+    font-size: 0.92rem;
+}
+
+.proctor-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(130px, 1fr));
+    gap: 14px;
+    margin: 18px 0;
+}
+
+.summary-card {
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+}
+
+.summary-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #990000;
+}
+
+.summary-label {
+    margin-top: 2px;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.validation-panel {
+    margin: 16px 0;
+}
+
+.validation-success,
+.validation-block,
+.validation-warning {
+    padding: 14px 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: white;
+}
+
+.validation-success {
+    border-color: #badbcc;
+    background: #f3fbf7;
+}
+
+.validation-block {
+    border-color: #f0b8b8;
+    background: #fff5f5;
+}
+
+.validation-warning {
+    border-color: #e4cf8d;
+    background: #fffbea;
+}
+
+.validation-panel ul {
+    margin: 8px 0 0 20px;
+}
+
+.proctor-export-controls {
+    margin: 16px 0;
+}
+
+#proctor-table {
+    margin-top: 16px;
+}
+
+.proctor-table-note {
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.proctor-table-scroll {
+    overflow-x: auto;
+    max-height: 68vh;
+    border: 1px solid #ddd;
+    background: white;
+}
+
+.proctor-table-scroll table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+.proctor-table-scroll th,
+.proctor-table-scroll td {
+    border: 1px solid #ddd;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.proctor-table-scroll th {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 2;
+}
+
+.proctor-table-scroll tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.proctor-table-scroll tbody tr:hover {
+    background: #f7eded;
+}
+
+@media (max-width: 900px) {
+    .proctor-upload-grid,
+    .proctor-summary-grid {
+        grid-template-columns: 1fr;
+    }
+}

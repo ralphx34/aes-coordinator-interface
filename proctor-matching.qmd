@@ -1,0 +1,75 @@
+---
+title: ""
+format: html
+---
+
+<link rel="stylesheet" href="styles.css">
+
+# Proctor Matching
+
+<div class="instructions">
+<strong>How to use:</strong>
+Upload the Netlify Forms export and the finalized testing-cohort CSV for the same exam period. The site processes both files locally in your browser, expands each proctor submission into one row per cohort, and validates the data before allowing a cleaned export. Duplicate submissions are resolved automatically using the latest valid preferences while preserving the earliest valid submission time for FCFS priority. Stale submissions from older cohort configurations are excluded with a warning.
+</div>
+
+```{=html}
+<div class="proctor-upload-grid">
+  <div class="control-group">
+    <label for="netlify-upload">Netlify Forms Export</label>
+    <input type="file" id="netlify-upload" accept=".csv,text/csv">
+  </div>
+
+  <div class="control-group">
+    <label for="cohort-upload">Testing Cohort CSV</label>
+    <input type="file" id="cohort-upload" accept=".csv,text/csv">
+  </div>
+
+  <div class="control-group roster-placeholder">
+    <label>Expected Proctor Roster</label>
+    <button type="button" class="secondary-button" disabled>Coming Later</button>
+  </div>
+</div>
+
+<div id="proctor-status" class="status-panel">Waiting for both files.</div>
+
+<div id="proctor-summary" class="proctor-summary-grid" hidden>
+  <div class="summary-card">
+    <div class="summary-value" id="summary-submissions">0</div>
+    <div class="summary-label">Submissions</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" id="summary-valid">0</div>
+    <div class="summary-label">Valid</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" id="summary-cohorts">0</div>
+    <div class="summary-label">Cohorts</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" id="summary-preferences">0</div>
+    <div class="summary-label">Preference Rows</div>
+  </div>
+</div>
+
+<div id="validation-panel" class="validation-panel" hidden></div>
+
+<div class="proctor-export-controls">
+  <button type="button" id="download-cleaned" class="export-button" disabled>
+    Download Cleaned CSV
+  </button>
+</div>
+
+<div id="proctor-table"></div>
+
+<div class="proctor-matching-controls">
+  <button type="button" id="run-matching" class="export-button" disabled>
+    Run Matching
+  </button>
+</div>
+
+<div id="matching-summary" class="validation-panel" hidden></div>
+<div id="matching-trace" class="validation-panel" hidden></div>
+<div id="matching-solutions"></div>
+
+<script src="proctor-matching.js"></script>
+```

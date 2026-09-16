@@ -1,0 +1,21 @@
+project:
+  type: website
+
+website:
+  title: "AES Coordinator"
+  navbar:
+    left:
+      - href: index.qmd
+        text: AES Planning
+      - href: proctor-matching.qmd
+        text: Proctor Matching
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: false
+
+resources:
+  - proctor-matching-worker.js
+  - node_modules/javascript-lp-solver/dist/solver.global.js
