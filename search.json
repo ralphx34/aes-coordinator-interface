@@ -7,6 +7,13 @@
     "text": "Proctor Matching\n\nHow to use: Upload the Netlify Forms export and the finalized testing-cohort CSV for the same exam period. The site processes both files locally in your browser, expands each proctor submission into one row per cohort, and validates the data before allowing a cleaned export. Duplicate submissions are resolved automatically using the latest valid preferences while preserving the earliest valid submission time for FCFS priority. Preferences are reconciled against the cohort CSV you choose: matching cohorts retain their responses, removed cohorts are omitted, and cohorts missing from an older submission default to Unavailable.\n\n\n  \n    Netlify Forms Export\n    \n  \n\n  \n    Testing Cohort CSV\n    \n  \n\n  \n    Expected Proctor Roster\n    Coming Later\n  \n\n\n\n  Retrieve Individual Submission\n  Search the uploaded Netlify export by proctor name or university email. Download one person's previous preferences to send back for revisions. This lookup works without uploading the cohort CSV; all processing takes place in your browser.\n  \n    Proctor name or university email\n    \n  \n  \n\n\nWaiting for both files.\n\n\n  \n    0\n    Submissions\n  \n  \n    0\n    Valid\n  \n  \n    0\n    Cohorts\n  \n  \n    0\n    Preference Rows\n  \n\n\n\n\n\n  \n    Download Cleaned CSV\n  \n\n\n\n\n\n  \n    Run Matching"
   },
   {
+    "objectID": "email-generator.html",
+    "href": "email-generator.html",
+    "title": "AES Email Generator",
+    "section": "",
+    "text": "AES Email Generator\n\nHow to use: Upload a testing-cohort CSV exported from the AES Coordinator. Each cohort will appear below with a button for generating its email.\n\n\n  Testing Cohort CSV\n  \n  No CSV loaded.\n\n\n\n\n\n\n\n  \n  \n  \n    Copy Email\n    Close Preview"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "AES Coordinator",
