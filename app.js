@@ -1804,16 +1804,18 @@ function invalidRoomSizeRows(rows) {
 }
 
 function handleExportCurrentView() {
-    if (currentView === "planning" && cohortMode && manualCohortEditMode) {
-        const invalidRows = invalidRoomSizeRows(currentDisplayedRows);
+    if (!(currentView === "planning" && cohortMode && manualCohortEditMode)) {
+        return;
+    }
 
-        if (invalidRows.length) {
-            alert(
-                "Room Size must be a positive whole number for every displayed cohort before exporting. " +
-                "Check any blank, zero, or invalid Room Size entries."
-            );
-            return;
-        }
+    const invalidRows = invalidRoomSizeRows(currentDisplayedRows);
+
+    if (invalidRows.length) {
+        alert(
+            "Room Size must be a positive whole number for every displayed cohort before exporting. " +
+            "Check any blank, zero, or invalid Room Size entries."
+        );
+        return;
     }
 
     downloadCurrentViewCsv();
@@ -2150,6 +2152,10 @@ function pruneManualSelections() {
 }
 
 function renderCurrentView() {
+    const allowCohortCsvExport =
+        currentView === "planning" && cohortMode && manualCohortEditMode;
+    exportCurrentViewButton.classList.toggle("hidden", !allowCohortCsvExport);
+
     if (manualCohortEditMode && cohortMode && detailedRows.length) {
         pruneManualSelections();
     }
@@ -2229,28 +2235,16 @@ function renderCurrentView() {
         exportCurrentViewButton.disabled = true;
     }
 
-    if (cohortMode && currentView === "planning") {
-        currentDisplayedColumns = manualCohortEditMode
-            ? [
-                "Instructors",
-                "Course",
-                "Section",
-                "Exam Date",
-                "Start",
-                "AES End",
-                "Room Size"
-            ]
-            : [
-                "Instructors",
-                "Course",
-                "Section",
-                "Exam Date",
-                "Start",
-                "AES End",
-                "AES Students"
-            ];
-    } else if (rows.length > 0) {
-        currentDisplayedColumns = visibleEntries(rows[0]).map(([column]) => column);
+    if (allowCohortCsvExport) {
+        currentDisplayedColumns = [
+            "Instructors",
+            "Course",
+            "Section",
+            "Exam Date",
+            "Start",
+            "AES End",
+            "Room Size"
+        ];
     } else {
         currentDisplayedColumns = [];
     }
@@ -2260,14 +2254,9 @@ function renderCurrentView() {
         currentDisplayedRows.length === 0 || currentDisplayedColumns.length === 0;
     exportSessionJsonButton.disabled = submissions.length === 0;
 
-    if (currentView === "planning" && cohortMode) {
-        exportCurrentViewButton.textContent = "Export Current View";
-        exportCurrentViewButton.title =
-            "Downloads the scheduling CSV and a JSON cohort file that can be loaded later.";
-    } else {
-        exportCurrentViewButton.textContent = "Export Current View";
-        exportCurrentViewButton.title = "Downloads the currently displayed rows as CSV.";
-    }
+    exportCurrentViewButton.textContent = "Export Testing Cohorts CSV";
+    exportCurrentViewButton.title =
+        "Downloads the manually edited testing cohorts as CSV.";
 
     tableContainer.innerHTML = cohortMode && currentView === "planning"
         ? buildCohortTable(rows)
