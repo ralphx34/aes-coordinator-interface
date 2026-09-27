@@ -17,5 +17,6 @@ format:
     toc: false
 
 resources:
+  - app.js
   - proctor-matching-worker.js
   - node_modules/javascript-lp-solver/dist/solver.global.js

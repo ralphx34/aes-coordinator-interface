@@ -1253,15 +1253,15 @@ function exportDisplayValue(column, value) {
     return String(value);
 }
 
-function downloadCurrentViewCsv() {
-    if (!currentDisplayedRows.length || !currentDisplayedColumns.length) {
+function downloadCurrentViewCsv(rows, columns) {
+    if (!rows.length || !columns.length) {
         return;
     }
 
     const lines = [
-        currentDisplayedColumns.map(csvEscape).join(","),
-        ...currentDisplayedRows.map(row =>
-            currentDisplayedColumns
+        columns.map(csvEscape).join(","),
+        ...rows.map(row =>
+            columns
                 .map(column => csvEscape(exportDisplayValue(column, row[column])))
                 .join(",")
         )
@@ -1818,7 +1818,17 @@ function handleExportCurrentView() {
         return;
     }
 
-    downloadCurrentViewCsv();
+    const exportColumns = [
+        "Instructors",
+        "Course",
+        "Section",
+        "Exam Date",
+        "Start",
+        "AES End",
+        "Room Size"
+    ];
+
+    downloadCurrentViewCsv(currentDisplayedRows, exportColumns);
 }
 
 function cohortOptionLabel(cohort) {
