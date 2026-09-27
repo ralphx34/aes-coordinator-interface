@@ -51,5 +51,5 @@ Upload one or more instructor AES submission <code>.json</code> files. The site 
 <div id="data-table"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="app.js?v=20260927-section-export"></script>
+<script src="app.js?v=20260927-section-export-v2"></script>
 ```
