@@ -1,0 +1,36 @@
+---
+title: ""
+format: html
+---
+
+<link rel="stylesheet" href="styles.css?v=20260927-interface-redesign-v4">
+
+# AES Email Generator
+
+<div class="instructions">
+<strong>How to use:</strong>
+Upload a testing-cohort CSV exported from the AES Coordinator. Each cohort will appear below with a button for generating its email.
+</div>
+
+```{=html}
+<div class="email-generator-controls">
+  <label for="cohort-csv-upload"><strong>Testing Cohort CSV</strong></label>
+  <input type="file" id="cohort-csv-upload" accept=".csv,text/csv">
+  <div id="email-generator-status" class="email-generator-status">No CSV loaded.</div>
+</div>
+
+<div id="email-cohort-table"></div>
+
+<div id="instructor-email-section"></div>
+
+<div id="email-preview-panel" class="email-preview-panel hidden">
+  <div id="email-preview-heading" class="email-preview-heading"></div>
+  <div id="email-preview" class="email-preview" contenteditable="true" aria-label="Generated email preview"></div>
+  <div class="email-preview-actions">
+    <button type="button" id="copy-email-button" class="export-button">Copy Email</button>
+    <button type="button" id="close-email-preview" class="cohort-button">Close Preview</button>
+  </div>
+</div>
+
+<script src="email-generator.js?v=20260927-interface-redesign-v4"></script>
+```

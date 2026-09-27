@@ -1863,10 +1863,11 @@ function buildTestingCohorts(detailRows) {
         const group = groups.get(cohortKey);
         group._members.push(row);
 
-        const contributorKey = [row.Instructor, row.Section].join("||");
+        const contributorKey = [row.Instructor, row.Course, row.Section].join("||");
         if (!group._contributors.has(contributorKey)) {
             group._contributors.set(contributorKey, {
                 Instructor: row.Instructor,
+                Course: row.Course,
                 Section: row.Section,
                 "AES Students": 0
             });
@@ -1878,17 +1879,24 @@ function buildTestingCohorts(detailRows) {
         const rows = group._members;
         const first = rows[0];
 
-        const uniqueCourses = [...new Set(rows.map(row => row.Course))];
-        const uniqueSections = [...new Set(rows.map(row => row.Section).filter(Boolean))]
-            .sort((a, b) => String(a).localeCompare(String(b), undefined, {
+        const contributors = [...group._contributors.values()].sort((a, b) =>
+            a.Instructor.localeCompare(b.Instructor, undefined, {
                 numeric: true,
                 sensitivity: "base"
-            }));
+            }) ||
+            String(a.Course).localeCompare(String(b.Course), undefined, {
+                numeric: true,
+                sensitivity: "base"
+            }) ||
+            String(a.Section).localeCompare(String(b.Section), undefined, {
+                numeric: true,
+                sensitivity: "base"
+            })
+        );
         const uniqueDates = [...new Set(rows.map(row => row["Exam Date"]))];
         const uniqueStarts = [...new Set(rows.map(row => row.Start))];
         const uniqueMultipliers = [...new Set(rows.map(row => row["1.5x or 2x"] || "2x"))];
 
-        let course = uniqueCourses.join(", ");
         let examDate = uniqueDates.length === 1 ? uniqueDates[0] : "Mixed";
         let start = uniqueStarts.length === 1 ? uniqueStarts[0] : first.Start;
         let multiplier = uniqueMultipliers.length === 1 ? uniqueMultipliers[0] : "2x";
@@ -1907,20 +1915,11 @@ function buildTestingCohorts(detailRows) {
             _cohortKey: group._cohortKey,
             _isCustom: group._isCustom,
             _members: rows,
-            _contributors: [...group._contributors.values()].sort((a, b) =>
-                a.Instructor.localeCompare(b.Instructor, undefined, {
-                    numeric: true,
-                    sensitivity: "base"
-                }) ||
-                String(a.Section).localeCompare(String(b.Section), undefined, {
-                    numeric: true,
-                    sensitivity: "base"
-                })
-            ),
+            _contributors: contributors,
             Type: group._isCustom ? "Custom Cohort" : "Automatic Cohort",
-            Instructors: [...new Set(rows.map(row => row.Instructor).filter(Boolean))].join(", "),
-            Course: course,
-            Section: uniqueSections.join(", "),
+            Instructors: contributors.map(contributor => contributor.Instructor).join(", "),
+            Course: contributors.map(contributor => contributor.Course).join(", "),
+            Section: contributors.map(contributor => contributor.Section).join(", "),
             "Exam Date": examDate,
             Start: start,
             "AES End": aesEnd,

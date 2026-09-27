@@ -9,6 +9,8 @@ website:
         text: AES Planning
       - href: proctor-matching.qmd
         text: Proctor Matching
+      - href: email-generator.qmd
+        text: Email Generator
 
 format:
   html:
@@ -18,5 +20,6 @@ format:
 
 resources:
   - app.js
+  - email-generator.js
   - proctor-matching-worker.js
   - node_modules/javascript-lp-solver/dist/solver.global.js
