@@ -125,7 +125,7 @@ manualCohortActionBar.id = "manual-cohort-action-bar";
 manualCohortActionBar.className = "manual-cohort-action-bar hidden";
 manualCohortActionBar.innerHTML = `
     <div class="manual-cohort-action-status" id="manual-cohort-action-status">
-        0 cohorts selected · 0 students selected
+        0 cohorts selected Â· 0 students selected
     </div>
     <div class="manual-cohort-action-buttons">
         <button type="button" id="combine-selected-cohorts" class="cohort-button" disabled>
@@ -365,7 +365,7 @@ function updateCohortControls() {
     const selectedStudentCount = selectedStudentKeys.size;
 
     manualCohortActionStatus.textContent =
-        `${selectedCount} cohort${selectedCount === 1 ? "" : "s"} · ` +
+        `${selectedCount} cohort${selectedCount === 1 ? "" : "s"} Â· ` +
         `${selectedStudentCount} student${selectedStudentCount === 1 ? "" : "s"}`;
 
     combineSelectedCohortsButton.disabled = selectedCount < 2;
@@ -485,7 +485,7 @@ function submissionIdentity(submission) {
 }
 
 function submissionLabel(submission) {
-    return `${submission.instructor} · ${submission.course} · ${submission.section}`;
+    return `${submission.instructor} Â· ${submission.course} Â· ${submission.section}`;
 }
 
 function sameNormalizedValue(a, b) {
@@ -836,7 +836,7 @@ function renderUpdateSummary(summary) {
     updateSummaryPanel.innerHTML = `
         <div class="update-summary-header">
             <strong>Update Summary</strong>
-            <button type="button" class="update-summary-close" aria-label="Close update summary">×</button>
+            <button type="button" class="update-summary-close" aria-label="Close update summary">Ã—</button>
         </div>
 
         <div class="update-summary-section">
@@ -1099,7 +1099,7 @@ function renderFinalsSettingsPanel() {
     finalsSettingsPanel.innerHTML = `
         <div class="finals-settings-header">
             <strong>Finals Week Settings</strong>
-            <button type="button" id="close-finals-settings" class="update-summary-close" aria-label="Close finals settings">×</button>
+            <button type="button" id="close-finals-settings" class="update-summary-close" aria-label="Close finals settings">Ã—</button>
         </div>
 
         <div class="finals-week-range">
@@ -1827,7 +1827,7 @@ function cohortOptionLabel(cohort) {
         cohort["Exam Date"] || "Mixed date",
         cohort.Start ? formatTime(cohort.Start) : "Mixed start",
         `${cohort["AES Students"]} student${cohort["AES Students"] === 1 ? "" : "s"}`
-    ].join(" · ");
+    ].join(" Â· ");
 }
 
 function buildTestingCohorts(detailRows) {
@@ -1867,6 +1867,11 @@ function buildTestingCohorts(detailRows) {
         const first = rows[0];
 
         const uniqueCourses = [...new Set(rows.map(row => row.Course))];
+        const uniqueSections = [...new Set(rows.map(row => row.Section).filter(Boolean))]
+            .sort((a, b) => String(a).localeCompare(String(b), undefined, {
+                numeric: true,
+                sensitivity: "base"
+            }));
         const uniqueDates = [...new Set(rows.map(row => row["Exam Date"]))];
         const uniqueStarts = [...new Set(rows.map(row => row.Start))];
         const uniqueMultipliers = [...new Set(rows.map(row => row["1.5x or 2x"] || "2x"))];
@@ -1903,6 +1908,7 @@ function buildTestingCohorts(detailRows) {
             Type: group._isCustom ? "Custom Cohort" : "Automatic Cohort",
             Instructors: [...new Set(rows.map(row => row.Instructor).filter(Boolean))].join(", "),
             Course: course,
+            Section: uniqueSections.join(", "),
             "Exam Date": examDate,
             Start: start,
             "AES End": aesEnd,
@@ -1954,7 +1960,7 @@ function buildCohortTable(rows) {
                     ${columns.map(column => {
                         let indicator = "";
                         if (currentSortColumn === column) {
-                            indicator = currentSortAscending ? " ▲" : " ▼";
+                            indicator = currentSortAscending ? " â–²" : " â–¼";
                         }
 
                         return `
@@ -1996,7 +2002,7 @@ function buildCohortTable(rows) {
                     data-cohort-key="${escapeHtml(row._cohortKey)}"
                     aria-expanded="${expanded}"
                     title="${expanded ? "Hide students" : "Show students"}"
-                >${expanded ? "−" : "+"}</button>
+                >${expanded ? "âˆ’" : "+"}</button>
             </td>
         `;
 
@@ -2023,7 +2029,7 @@ function buildCohortTable(rows) {
             }
 
             const value = formatDisplayValue(column, row[column]);
-            const classes = value === "—" ? "empty-cell" : "";
+            const classes = value === "â€”" ? "empty-cell" : "";
             html += `<td class="${classes}">${escapeHtml(value)}</td>`;
         }
 
@@ -2084,7 +2090,7 @@ function buildCohortTable(rows) {
                                                             class="move-student-select"
                                                             data-student-key="${escapeHtml(studentKey)}"
                                                         >
-                                                            <option value="">Choose cohort…</option>
+                                                            <option value="">Choose cohortâ€¦</option>
                                                             ${cohortOptions
                                                                 .filter(option => option.key !== row._cohortKey)
                                                                 .map(option => `
@@ -2228,6 +2234,7 @@ function renderCurrentView() {
             ? [
                 "Instructors",
                 "Course",
+                "Section",
                 "Exam Date",
                 "Start",
                 "AES End",
@@ -2236,6 +2243,7 @@ function renderCurrentView() {
             : [
                 "Instructors",
                 "Course",
+                "Section",
                 "Exam Date",
                 "Start",
                 "AES End",
@@ -2361,7 +2369,7 @@ function buildTable(rows) {
                     ${columns.map(column => {
                         let indicator = "";
                         if (currentSortColumn === column) {
-                            indicator = currentSortAscending ? " ▲" : " ▼";
+                            indicator = currentSortAscending ? " â–²" : " â–¼";
                         }
 
                         return `
@@ -2386,7 +2394,7 @@ function buildTable(rows) {
                 classes.push("placeholder-student");
             }
 
-            if (value === "—") {
+            if (value === "â€”") {
                 classes.push("empty-cell");
             }
 
@@ -2410,7 +2418,7 @@ function visibleEntries(row) {
 
 function formatDisplayValue(column, value) {
     if (value === null || value === undefined || value === "") {
-        return "—";
+        return "â€”";
     }
 
     if (column === "Exam Date") {
@@ -2523,7 +2531,7 @@ function minutesToTime(totalMinutes) {
 }
 
 function formatTime(value) {
-    if (!value) return "—";
+    if (!value) return "â€”";
 
     const [hourText, minute] = String(value).split(":");
     let hour = Number(hourText);
@@ -2537,7 +2545,7 @@ function formatTime(value) {
 }
 
 function formatDate(value) {
-    if (!value) return "—";
+    if (!value) return "â€”";
 
     const date = new Date(`${value}T00:00:00`);
 
