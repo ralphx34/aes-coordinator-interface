@@ -125,7 +125,7 @@ manualCohortActionBar.id = "manual-cohort-action-bar";
 manualCohortActionBar.className = "manual-cohort-action-bar hidden";
 manualCohortActionBar.innerHTML = `
     <div class="manual-cohort-action-status" id="manual-cohort-action-status">
-        0 cohorts selected · 0 students selected
+        0 cohorts selected Â· 0 students selected
     </div>
     <div class="manual-cohort-action-buttons">
         <button type="button" id="combine-selected-cohorts" class="cohort-button" disabled>
@@ -365,7 +365,7 @@ function updateCohortControls() {
     const selectedStudentCount = selectedStudentKeys.size;
 
     manualCohortActionStatus.textContent =
-        `${selectedCount} cohort${selectedCount === 1 ? "" : "s"} · ` +
+        `${selectedCount} cohort${selectedCount === 1 ? "" : "s"} Â· ` +
         `${selectedStudentCount} student${selectedStudentCount === 1 ? "" : "s"}`;
 
     combineSelectedCohortsButton.disabled = selectedCount < 2;
@@ -485,7 +485,7 @@ function submissionIdentity(submission) {
 }
 
 function submissionLabel(submission) {
-    return `${submission.instructor} · ${submission.course} · ${submission.section}`;
+    return `${submission.instructor} Â· ${submission.course} Â· ${submission.section}`;
 }
 
 function sameNormalizedValue(a, b) {
@@ -836,7 +836,7 @@ function renderUpdateSummary(summary) {
     updateSummaryPanel.innerHTML = `
         <div class="update-summary-header">
             <strong>Update Summary</strong>
-            <button type="button" class="update-summary-close" aria-label="Close update summary">×</button>
+            <button type="button" class="update-summary-close" aria-label="Close update summary">Ã—</button>
         </div>
 
         <div class="update-summary-section">
@@ -1099,7 +1099,7 @@ function renderFinalsSettingsPanel() {
     finalsSettingsPanel.innerHTML = `
         <div class="finals-settings-header">
             <strong>Finals Week Settings</strong>
-            <button type="button" id="close-finals-settings" class="update-summary-close" aria-label="Close finals settings">×</button>
+            <button type="button" id="close-finals-settings" class="update-summary-close" aria-label="Close finals settings">Ã—</button>
         </div>
 
         <div class="finals-week-range">
@@ -1253,15 +1253,15 @@ function exportDisplayValue(column, value) {
     return String(value);
 }
 
-function downloadCurrentViewCsv() {
-    if (!currentDisplayedRows.length || !currentDisplayedColumns.length) {
+function downloadCurrentViewCsv(rows, columns) {
+    if (!rows.length || !columns.length) {
         return;
     }
 
     const lines = [
-        currentDisplayedColumns.map(csvEscape).join(","),
-        ...currentDisplayedRows.map(row =>
-            currentDisplayedColumns
+        columns.map(csvEscape).join(","),
+        ...rows.map(row =>
+            columns
                 .map(column => csvEscape(exportDisplayValue(column, row[column])))
                 .join(",")
         )
@@ -1804,19 +1804,31 @@ function invalidRoomSizeRows(rows) {
 }
 
 function handleExportCurrentView() {
-    if (currentView === "planning" && cohortMode && manualCohortEditMode) {
-        const invalidRows = invalidRoomSizeRows(currentDisplayedRows);
-
-        if (invalidRows.length) {
-            alert(
-                "Room Size must be a positive whole number for every displayed cohort before exporting. " +
-                "Check any blank, zero, or invalid Room Size entries."
-            );
-            return;
-        }
+    if (!(currentView === "planning" && cohortMode && manualCohortEditMode)) {
+        return;
     }
 
-    downloadCurrentViewCsv();
+    const invalidRows = invalidRoomSizeRows(currentDisplayedRows);
+
+    if (invalidRows.length) {
+        alert(
+            "Room Size must be a positive whole number for every displayed cohort before exporting. " +
+            "Check any blank, zero, or invalid Room Size entries."
+        );
+        return;
+    }
+
+    const exportColumns = [
+        "Instructors",
+        "Course",
+        "Section",
+        "Exam Date",
+        "Start",
+        "AES End",
+        "Room Size"
+    ];
+
+    downloadCurrentViewCsv(currentDisplayedRows, exportColumns);
 }
 
 function cohortOptionLabel(cohort) {
@@ -1827,7 +1839,7 @@ function cohortOptionLabel(cohort) {
         cohort["Exam Date"] || "Mixed date",
         cohort.Start ? formatTime(cohort.Start) : "Mixed start",
         `${cohort["AES Students"]} student${cohort["AES Students"] === 1 ? "" : "s"}`
-    ].join(" · ");
+    ].join(" Â· ");
 }
 
 function buildTestingCohorts(detailRows) {
@@ -1867,6 +1879,11 @@ function buildTestingCohorts(detailRows) {
         const first = rows[0];
 
         const uniqueCourses = [...new Set(rows.map(row => row.Course))];
+        const uniqueSections = [...new Set(rows.map(row => row.Section).filter(Boolean))]
+            .sort((a, b) => String(a).localeCompare(String(b), undefined, {
+                numeric: true,
+                sensitivity: "base"
+            }));
         const uniqueDates = [...new Set(rows.map(row => row["Exam Date"]))];
         const uniqueStarts = [...new Set(rows.map(row => row.Start))];
         const uniqueMultipliers = [...new Set(rows.map(row => row["1.5x or 2x"] || "2x"))];
@@ -1903,6 +1920,7 @@ function buildTestingCohorts(detailRows) {
             Type: group._isCustom ? "Custom Cohort" : "Automatic Cohort",
             Instructors: [...new Set(rows.map(row => row.Instructor).filter(Boolean))].join(", "),
             Course: course,
+            Section: uniqueSections.join(", "),
             "Exam Date": examDate,
             Start: start,
             "AES End": aesEnd,
@@ -1954,7 +1972,7 @@ function buildCohortTable(rows) {
                     ${columns.map(column => {
                         let indicator = "";
                         if (currentSortColumn === column) {
-                            indicator = currentSortAscending ? " ▲" : " ▼";
+                            indicator = currentSortAscending ? " â–²" : " â–¼";
                         }
 
                         return `
@@ -1996,7 +2014,7 @@ function buildCohortTable(rows) {
                     data-cohort-key="${escapeHtml(row._cohortKey)}"
                     aria-expanded="${expanded}"
                     title="${expanded ? "Hide students" : "Show students"}"
-                >${expanded ? "−" : "+"}</button>
+                >${expanded ? "âˆ’" : "+"}</button>
             </td>
         `;
 
@@ -2023,7 +2041,7 @@ function buildCohortTable(rows) {
             }
 
             const value = formatDisplayValue(column, row[column]);
-            const classes = value === "—" ? "empty-cell" : "";
+            const classes = value === "â€”" ? "empty-cell" : "";
             html += `<td class="${classes}">${escapeHtml(value)}</td>`;
         }
 
@@ -2084,7 +2102,7 @@ function buildCohortTable(rows) {
                                                             class="move-student-select"
                                                             data-student-key="${escapeHtml(studentKey)}"
                                                         >
-                                                            <option value="">Choose cohort…</option>
+                                                            <option value="">Choose cohortâ€¦</option>
                                                             ${cohortOptions
                                                                 .filter(option => option.key !== row._cohortKey)
                                                                 .map(option => `
@@ -2144,6 +2162,10 @@ function pruneManualSelections() {
 }
 
 function renderCurrentView() {
+    const allowCohortCsvExport =
+        currentView === "planning" && cohortMode && manualCohortEditMode;
+    exportCurrentViewButton.classList.toggle("hidden", !allowCohortCsvExport);
+
     if (manualCohortEditMode && cohortMode && detailedRows.length) {
         pruneManualSelections();
     }
@@ -2223,26 +2245,16 @@ function renderCurrentView() {
         exportCurrentViewButton.disabled = true;
     }
 
-    if (cohortMode && currentView === "planning") {
-        currentDisplayedColumns = manualCohortEditMode
-            ? [
-                "Instructors",
-                "Course",
-                "Exam Date",
-                "Start",
-                "AES End",
-                "Room Size"
-            ]
-            : [
-                "Instructors",
-                "Course",
-                "Exam Date",
-                "Start",
-                "AES End",
-                "AES Students"
-            ];
-    } else if (rows.length > 0) {
-        currentDisplayedColumns = visibleEntries(rows[0]).map(([column]) => column);
+    if (allowCohortCsvExport) {
+        currentDisplayedColumns = [
+            "Instructors",
+            "Course",
+            "Section",
+            "Exam Date",
+            "Start",
+            "AES End",
+            "Room Size"
+        ];
     } else {
         currentDisplayedColumns = [];
     }
@@ -2252,14 +2264,9 @@ function renderCurrentView() {
         currentDisplayedRows.length === 0 || currentDisplayedColumns.length === 0;
     exportSessionJsonButton.disabled = submissions.length === 0;
 
-    if (currentView === "planning" && cohortMode) {
-        exportCurrentViewButton.textContent = "Export Current View";
-        exportCurrentViewButton.title =
-            "Downloads the scheduling CSV and a JSON cohort file that can be loaded later.";
-    } else {
-        exportCurrentViewButton.textContent = "Export Current View";
-        exportCurrentViewButton.title = "Downloads the currently displayed rows as CSV.";
-    }
+    exportCurrentViewButton.textContent = "Export Testing Cohorts CSV";
+    exportCurrentViewButton.title =
+        "Downloads the manually edited testing cohorts as CSV.";
 
     tableContainer.innerHTML = cohortMode && currentView === "planning"
         ? buildCohortTable(rows)
@@ -2361,7 +2368,7 @@ function buildTable(rows) {
                     ${columns.map(column => {
                         let indicator = "";
                         if (currentSortColumn === column) {
-                            indicator = currentSortAscending ? " ▲" : " ▼";
+                            indicator = currentSortAscending ? " â–²" : " â–¼";
                         }
 
                         return `
@@ -2386,7 +2393,7 @@ function buildTable(rows) {
                 classes.push("placeholder-student");
             }
 
-            if (value === "—") {
+            if (value === "â€”") {
                 classes.push("empty-cell");
             }
 
@@ -2410,7 +2417,7 @@ function visibleEntries(row) {
 
 function formatDisplayValue(column, value) {
     if (value === null || value === undefined || value === "") {
-        return "—";
+        return "â€”";
     }
 
     if (column === "Exam Date") {
@@ -2523,7 +2530,7 @@ function minutesToTime(totalMinutes) {
 }
 
 function formatTime(value) {
-    if (!value) return "—";
+    if (!value) return "â€”";
 
     const [hourText, minute] = String(value).split(":");
     let hour = Number(hourText);
@@ -2537,7 +2544,7 @@ function formatTime(value) {
 }
 
 function formatDate(value) {
-    if (!value) return "—";
+    if (!value) return "â€”";
 
     const date = new Date(`${value}T00:00:00`);
 
