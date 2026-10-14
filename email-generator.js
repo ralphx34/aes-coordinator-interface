@@ -22,7 +22,7 @@ cohortCsvUpload.addEventListener("change", async () => {
         emailCohorts = rows.map((row, index) => ({
             ...row,
             _index: index,
-            _room: "",
+            _room: row.Room || "",
             _proctorName: ""
         }));
         instructorGroups = buildInstructorGroups(emailCohorts);
@@ -139,7 +139,7 @@ function renderEmailCohorts() {
                 <span>${escapeHtml(cohort.Instructors)}</span><br>
                 <span>${escapeHtml(formatExamDate(cohort["Exam Date"]))}, ${escapeHtml(cohort.Start)} &ndash; ${escapeHtml(cohort["AES End"])}</span>
             </td>
-            <td><input class="email-field cohort-room" data-index="${index}" placeholder="e.g., LH 120"></td>
+            <td><input class="email-field cohort-room" data-index="${index}" value="${escapeHtml(cohort._room)}" placeholder="e.g., LH 120"></td>
             <td><input class="email-field cohort-proctor" data-index="${index}" placeholder="Proctor name"></td>
         </tr>`).join("");
     emailCohortTable.innerHTML = `
