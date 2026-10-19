@@ -8,7 +8,7 @@ const emailPreview = document.getElementById("email-preview");
 const copyEmailButton = document.getElementById("copy-email-button");
 const closeEmailPreviewButton = document.getElementById("close-email-preview");
 
-const REQUIRED_COHORT_COLUMNS = ["Instructors", "Course", "Section", "Exam Date", "Start", "AES End", "Room Size"];
+const REQUIRED_COHORT_COLUMNS = ["Instructors", "Course", "Section #", "Exam Date", "Start", "AES End", "Room Size"];
 let emailCohorts = [];
 let instructorGroups = [];
 let currentEmailMode = "aes";
