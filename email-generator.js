@@ -104,7 +104,7 @@ function splitAlignedValues(value) {
 function cohortContributors(cohort) {
     const instructors = splitAlignedValues(cohort.Instructors);
     const courses = splitAlignedValues(cohort.Course);
-    const sections = splitAlignedValues(cohort.Section);
+    const sections = splitAlignedValues(cohort["Section #"]);
     const count = Math.max(instructors.length, courses.length, sections.length);
     return Array.from({ length: count }, (_, index) => ({
         instructor: instructors[index] || instructors[0] || "Instructor",
@@ -135,7 +135,7 @@ function renderEmailCohorts() {
     const body = emailCohorts.map((cohort, index) => `
         <tr>
             <td>
-                <strong>${escapeHtml(cohort.Course)} Â· Section ${escapeHtml(cohort.Section)}</strong><br>
+                <strong>${escapeHtml(cohort.Course)} Â· Section ${escapeHtml(cohort["Section #"])}</strong><br>
                 <span>${escapeHtml(cohort.Instructors)}</span><br>
                 <span>${escapeHtml(formatExamDate(cohort["Exam Date"]))}, ${escapeHtml(cohort.Start)} &ndash; ${escapeHtml(cohort["AES End"])}</span>
             </td>
@@ -211,7 +211,7 @@ function buildProctorEmailRows() {
             <tbody>
                 ${emailCohorts.map((cohort, index) => `
                     <tr>
-                        <td><strong>${escapeHtml(cohort.Course)} Â· Section ${escapeHtml(cohort.Section)}</strong><br>${escapeHtml(formatExamDate(cohort["Exam Date"]))}, ${escapeHtml(cohort.Start)} &ndash; ${escapeHtml(cohort["AES End"])}</td>
+                        <td><strong>${escapeHtml(cohort.Course)} Â· Section ${escapeHtml(cohort["Section #"])}</strong><br>${escapeHtml(formatExamDate(cohort["Exam Date"]))}, ${escapeHtml(cohort.Start)} &ndash; ${escapeHtml(cohort["AES End"])}</td>
                         <td>${escapeHtml(cohort._proctorName || "Not entered")}</td>
                         <td><button type="button" class="export-button generate-proctor-email" data-index="${index}">Generate Proctor Assignment Email</button></td>
                     </tr>`).join("")}
